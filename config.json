@@ -1,8 +1,8 @@
 {
-  "baseUrl":  "mongodb+srv://admin:admin@cluster0.xmwgw.mongodb.net/StarWarDb?retryWrites=true&w=majority",
+  "baseUrl":  "mongodb+srv://admin:admin@cluster0.xmwgw.mongodb.net/StarWarsDb?retryWrites=true&w=majority",
   "username": "admin",
   "pw": "admin",
-  "db": "StarWarDb"
+  "db": "StarWarsDb"
 
 }
 
