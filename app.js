@@ -1,7 +1,7 @@
 //express
 const express = require('express')();
 const app = express;
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 // //middleware
 // const bodyParser = require('body-parser');
@@ -51,40 +51,40 @@ app
 
 })
 
-//GET all by :ID from db
-.get('/people/:id', async (req, res) => {
+// //GET all by :ID from db
+// .get('/people/:id', async (req, res) => {
 
-  //id is located in the query: req.params.id
-  try {
-    //connect db
-    await client.connect();
+//   //id is located in the query: req.params.id
+//   try {
+//     //connect db
+//     await client.connect();
 
-    //retrieve challeng data
-    const coll = client.db('StarWarsDb').collection('peoples')
+//     //retrieve challeng data
+//     const coll = client.db('StarWarsDb').collection('peoples')
 
-    //only look for a challenge with id
-    const query = {
-      _id: ObjectId(req.params.id)
-    };
+//     //only look for a challenge with id
+//     const query = {
+//       _id: ObjectId(req.params.id)
+//     };
 
-    const people = await coll.findOne(query)
+//     const people = await coll.findOne(query)
 
-    if (people) {
-      //send back the file
-      res.status(200).send(people);
-      return;
-    } else {
-      res.status(400).send("request could not be found with id " + req.params.id)
-    }
+//     if (people) {
+//       //send back the file
+//       res.status(200).send(people);
+//       return;
+//     } else {
+//       res.status(400).send("request could not be found with id " + req.params.id)
+//     }
 
-  } catch (error) {
-    console.log(error);
-    res.status(500).send({
-      error: "GET by id route error",
-      value: error
-    })
-  }
-})
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).send({
+//       error: "GET by id route error",
+//       value: error
+//     })
+//   }
+// })
 
 app.listen(port, () => {
   console.log(`REST API is running at http://localhost:${port}`);
