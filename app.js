@@ -59,10 +59,10 @@ app
     //connect db
     await client.connect();
 
-    //retrieve challeng data
+    //retrieve data
     const coll = client.db('StarWarsDb').collection('peoples')
 
-    //only look for a challenge with id
+    //only look for with id
     const query = {
       _id: ObjectId(req.params.id)
     };
@@ -86,16 +86,16 @@ app
   }
 })
 
-//POST challenges to db
+//POST  to db
 .post('/people', async (req, res) => {
   try {
     //connect db
     await client.connect();
 
-    //retrieve challenge data
+    //retrieve data
     const coll = client.db('StarWarsDb').collection('peoples');
 
-    // create new person object
+    // create new  object
     let newPerson = {
       "name": req.body.name,
       "birthyear": req.body.birthyear,
@@ -106,7 +106,7 @@ app
     //insert into db
     let insertResult = await coll.insertOne(newPerson)
 
-    //succes message
+    //success message
     res.status(201).json(newPerson)
     return;
 
@@ -119,38 +119,71 @@ app
 
 })
 
-//PUT challenges to db
-.put('/people', async (req, res) => {
+//PUT  to db
+.put('/people/:id', async (req, res) => {
   try {
     //connect db
     await client.connect();
 
-    //retrieve challenge data
-    const coll = client.db('StarWarsDb').collection('peoples');
+    //retrieve challenge data from db
+    const coll = client.db('StarWarsDb').collection('peoples')
 
-    // create new person object
-    let newPerson = {
-      "name": req.body.name,
-      "birthyear": req.body.birthyear,
-      "species": req.body.species,
-      "gender": req.body.gender,
-    }
+    //only look for a challenge with id
+    const query = {
+      _id: ObjectId(req.params.id)
+    };
 
-    //insert into db
-    let insertResult = await coll.insertOne(newPerson)
-
-    //succes message
-    res.status(201).json(newPerson)
-    return;
+    const updateDocument = {
+      $set: {
+        name: req.body.name,
+      }
+    };
+    // updates document based on query
+    await coll.updateOne(query, updateDocument)
+    res.status(200).json({
+      message: 'Succesfully Updated The Name to : ' + req.body.name
+    });
 
   } catch (error) {
     console.log(error);
-    res.status(500).send("An error has occured")
-  } finally {
-    await client.close()
+    res.status(500).send({
+      error: "PUT request went wrong",
+      value: error
+    })
   }
 
 })
+//DELETE  from db
+  .delete('/people/:id', async (req, res) => {
+    //id is located in the query: req.params.id
+    try {
+      //connect db
+      await client.connect();
+
+      //retrieve  data
+      const coll = client.db('StarWarsDb').collection('peoples')
+
+
+      //only look for with id
+      const query = {
+        _id: ObjectId(req.params.id)
+      };
+
+      //DELETE 
+      await coll.deleteOne(query)
+      res.status(200).json({
+        message: 'Succesfully Deleted!'
+      });
+
+
+    } catch (error) {
+      console.log(error);
+      res.status(500).send({
+        error: "something went wrong",
+        value: error
+      })
+    }
+  })
 
 app.listen(port, () => {
   console.log(`REST API is running at http://localhost:${port}`);
