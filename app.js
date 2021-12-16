@@ -3,9 +3,9 @@ const express = require('express')();
 const app = express;
 const port = process.env.PORT || 3000;
 
-// //middleware
-// const bodyParser = require('body-parser');
-// app.use(bodyParser.json());
+//middleware
+const bodyParser = require('body-parser');
+app.use(bodyParser.json());
 // const cors = require('cors');
 // app.use(cors);
 
@@ -51,43 +51,76 @@ app
 
 })
 
-// //GET all by :ID from db
-// .get('/people/:id', async (req, res) => {
+//GET all by :ID from db
+.get('/people/:id', async (req, res) => {
 
-//   //id is located in the query: req.params.id
-//   try {
-//     //connect db
-//     await client.connect();
+  //id is located in the query: req.params.id
+  try {
+    //connect db
+    await client.connect();
 
-//     //retrieve challeng data
-//     const coll = client.db('StarWarsDb').collection('peoples')
+    //retrieve challeng data
+    const coll = client.db('StarWarsDb').collection('peoples')
 
-//     //only look for a challenge with id
-//     const query = {
-//       _id: ObjectId(req.params.id)
-//     };
+    //only look for a challenge with id
+    const query = {
+      _id: ObjectId(req.params.id)
+    };
 
-//     const people = await coll.findOne(query)
+    const people = await coll.findOne(query)
 
-//     if (people) {
-//       //send back the file
-//       res.status(200).send(people);
-//       return;
-//     } else {
-//       res.status(400).send("request could not be found with id " + req.params.id)
-//     }
+    if (people) {
+      //send back the file
+      res.status(200).send(people);
+      return;
+    } else {
+      res.status(400).send("request could not be found with id " + req.params.id)
+    }
 
-//   } catch (error) {
-//     console.log(error);
-//     res.status(500).send({
-//       error: "GET by id route error",
-//       value: error
-//     })
-//   }
-// })
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      error: "GET by id route error",
+      value: error
+    })
+  }
+})
 
 //POST challenges to db
-.post('/postPeople', async (req, res) => {
+.post('/people', async (req, res) => {
+  try {
+    //connect db
+    await client.connect();
+
+    //retrieve challenge data
+    const coll = client.db('StarWarsDb').collection('peoples');
+
+    // create new person object
+    let newPerson = {
+      "name": req.body.name,
+      "birthyear": req.body.birthyear,
+      "species": req.body.species,
+      "gender": req.body.gender,
+    }
+
+    //insert into db
+    let insertResult = await coll.insertOne(newPerson)
+
+    //succes message
+    res.status(201).json(newPerson)
+    return;
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("An error has occured")
+  } finally {
+    await client.close()
+  }
+
+})
+
+//PUT challenges to db
+.put('/people', async (req, res) => {
   try {
     //connect db
     await client.connect();
