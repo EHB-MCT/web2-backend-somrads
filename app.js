@@ -86,6 +86,39 @@ app
 //   }
 // })
 
+//POST challenges to db
+.post('/postPeople', async (req, res) => {
+  try {
+    //connect db
+    await client.connect();
+
+    //retrieve challenge data
+    const coll = client.db('StarWarsDb').collection('peoples');
+
+    // create new person object
+    let newPerson = {
+      "name": req.body.name,
+      "birthyear": req.body.birthyear,
+      "species": req.body.species,
+      "gender": req.body.gender,
+    }
+
+    //insert into db
+    let insertResult = await coll.insertOne(newPerson)
+
+    //succes message
+    res.status(201).json(newPerson)
+    return;
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("An error has occured")
+  } finally {
+    await client.close()
+  }
+
+})
+
 app.listen(port, () => {
   console.log(`REST API is running at http://localhost:${port}`);
 }) 
