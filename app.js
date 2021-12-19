@@ -8,15 +8,17 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 // const cors = require('cors');
 // app.use(cors);
+// load ENV file 
+require('dotenv').config()
+
 
 //mongo config
 const {
   MongoClient,
   ObjectId
 } = require('mongodb');
-const config = require('./config.json')
 //new mongo client
-const client = new MongoClient(config.baseUrl);
+const client = new MongoClient(process.env.FINAL_URL);
 
  //Root route
 app.get('/', (req, res) => {
