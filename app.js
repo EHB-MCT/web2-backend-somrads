@@ -6,6 +6,7 @@ const port = process.env.PORT || 3000;
 //middleware
 const bodyParser = require('body-parser');
 app.use(bodyParser.json());
+//cors
 const cors = require('cors');
 app.use(cors);
 // load ENV file 
