@@ -4,11 +4,12 @@ const app = express;
 const port = process.env.PORT || 3000;
 
 //middleware
+//cors
+const cors = require('cors');
+// app.use(cors);
+
 const bodyParser = require('body-parser');
 app.use(bodyParser.json());
-//cors
-// const cors = require('cors');
-// app.use(cors);
 // load ENV file 
 require('dotenv').config()
 
@@ -90,7 +91,7 @@ app
 })
 
 //POST  to db
-.post('/people', async (req, res) => {
+.post('/people',cors(), async (req, res) => {
   try {
     //connect db
     await client.connect();
