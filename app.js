@@ -29,7 +29,7 @@ app.get('/', (req, res) => {
 //APP ROUTES
 app
 // people routes
-.get("/people", async (req, res) => {
+.get("/people",cors(), async (req, res) => {
   try {
     //Read file//
 
